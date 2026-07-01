@@ -86,8 +86,20 @@ Delays are in seconds.
 
 ## Verdict
 
-This API is suitable for our data pipeline. The departures endpoint is the most valuable —
-it gives us realtime delay data per line per station, which we can store over time and
-analyze for patterns, trends, and anomalies.
+The BVG API data is valuable and the endpoints are well structured. However, we are not
+moving forward with BVG as our data source at this time due to the following reasons:
 
-**Chosen endpoint for pipeline:** `/stops/<id>/departures`
+- **Official API inaccessible** — BVG's official developer portal requires submitting an
+  application and activating an account. The activation flow was broken and non-functional,
+  making it impossible to get approved access.
+- **Community API unreliable** — the community REST API (`v6.bvg.transport.rest`) is
+  maintained by a single independent developer. During investigation it was down and
+  returned 503 errors, making it unsuitable for a production pipeline.
+- **No SLA or support** — as a one-person open source project, there is no guaranteed
+  uptime, no support channel, and no SLA.
+
+## Decision
+
+BVG is not selected. We are moving to a more reliable and accessible data source.
+The investigation and pipeline code are kept here for reference and may be revisited
+if the official BVG API becomes accessible in the future.
