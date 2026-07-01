@@ -5,4 +5,7 @@ description = "Add your description here"
 requires-python = ">=3.9"
 dependencies = [
     "dlt>=1.12.1",
+    "duckdb>=1.4.5",
+    "numpy>=2.0.2",
+    "pandas>=2.3.3",
 ]
