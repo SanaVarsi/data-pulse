@@ -58,7 +58,7 @@ if __name__ == "__main__":
     pipeline = dlt.pipeline(
         pipeline_name="bright_sky_weather",
         destination="duckdb",
-        dataset_name="weather",
+        dataset_name="landing",
     )
 
     load_info = pipeline.run(bright_sky_weather())
