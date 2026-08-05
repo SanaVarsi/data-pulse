@@ -1,1 +1,3 @@
-*.duckdb
+.DS_Store
+logs/
+transforms/dev.duckdb

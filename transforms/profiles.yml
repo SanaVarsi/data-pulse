@@ -1,0 +1,8 @@
+transforms:
+  outputs:
+    dev:
+      type: duckdb
+      path: ../bright_sky_weather.duckdb
+      schema: main
+      threads: 1
+  target: dev
