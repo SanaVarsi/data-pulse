@@ -12,16 +12,20 @@ st.title("Berlin Weather Dashboard")
 st.write("Explore daily weather patterns in Berlin. Data is collected hourly from the Bright Sky API and aggregated by day.")
 
 df = conn.execute("SELECT * FROM gold_weather_daily ORDER BY date").df()
+if df.empty:
+    st.warning("No data yet — run the pipeline first.")
+    st.stop()
 
 st.divider()
 
-today = df[df["date"] == df["date"].max()].iloc[0]
+complete = df[df["hour_count"] >= 24]
+latest = (complete if not complete.empty else df).iloc[-1]
 overall_avg = df["avg_temp_c"].mean()
 
 col1, col2, col3 = st.columns(3)
-col1.metric("Today's Temperature", f"{today['avg_temp_c']}°C", f"{round(today['avg_temp_c'] - overall_avg, 1)}°C vs average")
-col2.metric("Today's Rainfall", f"{today['total_precipitation_mm']} mm")
-col3.metric("Today's Max Wind", f"{today['max_wind_speed_kmh']} km/h")
+col1.metric("Latest Day's Temperature", f"{latest['avg_temp_c']}°C", f"{round(latest['avg_temp_c'] - overall_avg, 1)}°C vs average")
+col2.metric("Latest Day's Rainfall", f"{latest['total_precipitation_mm']} mm")
+col3.metric("Latest Day's Max Wind", f"{latest['max_wind_speed_kmh']} km/h")
 
 st.divider()
 
