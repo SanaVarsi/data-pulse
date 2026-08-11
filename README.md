@@ -3,6 +3,9 @@
 A generic end-to-end data pipeline framework — ingest from any API, store in DuckDB, transform with dbt, and visualize on a dashboard.
 
 Built as a portfolio project to demonstrate a real-world data engineering stack using open source tools.
+## Dashboard Preview
+
+![Berlin Weather Dashboard](docs/dashboard.png)
 
 ## Live Dashboard
 
