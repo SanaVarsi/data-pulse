@@ -1,13 +1,16 @@
 import streamlit as st
 import duckdb
 import pandas as pd
+from pathlib import Path
+
+DB = Path(__file__).resolve().parent.parent / "bright_sky_weather.duckdb"
+conn = duckdb.connect(str(DB), read_only=True)
 
 st.set_page_config(page_title="Berlin Weather Dashboard", layout="wide")
 
 st.title("Berlin Weather Dashboard")
 st.write("Explore daily weather patterns in Berlin. Data is collected hourly from the Bright Sky API and aggregated by day.")
 
-conn = duckdb.connect("/Users/sanawarsi/dev/data-pulse/bright_sky_weather.duckdb")
 df = conn.execute("SELECT * FROM gold_weather_daily ORDER BY date").df()
 
 st.divider()
