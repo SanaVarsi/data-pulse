@@ -2,3 +2,4 @@
 logs/
 transforms/dev.duckdb
 transforms/.user.yml
+transforms/target/
