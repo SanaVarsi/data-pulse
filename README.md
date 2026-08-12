@@ -109,3 +109,9 @@ uv run streamlit run dashboard/app.py
 ## Data Source
 
 Weather data is sourced from [Bright Sky](https://brightsky.dev) — a free API built on top of open data from the German Weather Service (DWD). Data covers Berlin (52.52°N, 13.405°E).
+
+---
+
+## Known Limitations
+
+- **DuckDB stored in git** — the database file is committed to the repo daily by the pipeline. This works for a portfolio project but will grow over time. [MotherDuck](https://motherduck.com) (hosted DuckDB) is the natural next step for production use.
