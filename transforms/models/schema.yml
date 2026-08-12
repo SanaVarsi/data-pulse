@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: silver_weather
+    columns:
+      - name: timestamp
+        tests:
+          - not_null
+          - unique
+      - name: temperature_c
+        tests:
+          - not_null
+
+  - name: gold_weather_daily
+    columns:
+      - name: date
+        tests:
+          - not_null
+          - unique
+      - name: hour_count
+        tests:
+          - not_null
