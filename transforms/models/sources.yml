@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: landing
+
+    tables:
+      - name: weather
+        loaded_at_field: "CAST(timestamp AS TIMESTAMP)"
+        freshness:
+          warn_after: {count: 26, period: hour}
