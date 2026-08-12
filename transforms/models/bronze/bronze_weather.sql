@@ -1,1 +1,1 @@
-SELECT * FROM landing.weather
+SELECT * FROM {{ source('landing', 'weather') }}
