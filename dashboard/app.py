@@ -1,7 +1,11 @@
+import sys
 import streamlit as st
 import duckdb
 import pandas as pd
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent))
+from forecast import build_forecast
 
 DB = Path(__file__).resolve().parent.parent / "bright_sky_weather.duckdb"
 
@@ -69,3 +73,26 @@ if anomalies.empty:
     st.info("No anomalies detected yet — more data needed for a 30-day baseline.")
 else:
     st.dataframe(anomalies[["date", "avg_temp_c", "rolling_avg", "z_score"]].round(2))
+
+st.divider()
+
+st.subheader("7-Day Temperature Forecast")
+st.write("A simple linear regression model trained on past temperatures predicts the next 7 days. Lag features used: yesterday, 2 days ago, and 7 days ago.")
+
+if len(df) < 10:
+    st.info("Not enough data for a forecast — need at least 10 days.")
+else:
+    try:
+        forecast_df, mae, historical_preds = build_forecast(df)
+        st.caption(f"Model MAE: {mae}°C — on average the model is off by {mae} degrees on historical data.")
+
+        historical_preds["date"] = pd.to_datetime(historical_preds["date"])
+        forecast_df["date"] = pd.to_datetime(forecast_df["date"])
+
+        st.write("**Historical: Actual vs Model Prediction**")
+        st.line_chart(historical_preds, x="date", y=["avg_temp_c", "model_pred_c"])
+
+        st.write("**Next 7 Days Forecast**")
+        st.line_chart(forecast_df, x="date", y="forecast_temp_c")
+    except Exception as e:
+        st.error(f"Forecast error: {e}")
