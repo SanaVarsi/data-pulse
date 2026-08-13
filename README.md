@@ -112,6 +112,12 @@ Weather data is sourced from [Bright Sky](https://brightsky.dev) — a free API 
 
 ---
 
+## Planned Features
+
+- **Natural language to SQL** — a text box where users type questions in plain English (e.g. "which day was windiest last month?"), an LLM converts it to SQL, DuckDB runs it, and the answer is shown on the dashboard. Implementation is ready but requires a paid LLM API (Claude/OpenAI) for deployment.
+
+---
+
 ## Known Limitations
 
 - **DuckDB stored in git** — the database file is committed to the repo daily by the pipeline. This works for a portfolio project but will grow over time. [MotherDuck](https://motherduck.com) (hosted DuckDB) is the natural next step for production use.
