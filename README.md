@@ -114,7 +114,7 @@ Weather data is sourced from [Bright Sky](https://brightsky.dev) — a free API 
 
 ## Planned Features
 
-- **Natural language to SQL** — a text box where users type questions in plain English (e.g. "which day was windiest last month?"), an LLM converts it to SQL, DuckDB runs it, and the answer is shown on the dashboard. Implementation is ready but requires a paid LLM API (Claude/OpenAI) for deployment.
+- **Natural language to SQL** — a text box where users type questions in plain English, an LLM converts it to SQL, DuckDB runs it, and the answer is shown on the dashboard. See [design doc](docs/nl_to_sql_design.md) for implementation details. Deferred due to LLM API cost for deployment.
 
 ---
 
