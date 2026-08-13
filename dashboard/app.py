@@ -8,14 +8,16 @@ DB = Path(__file__).resolve().parent.parent / "bright_sky_weather.duckdb"
 @st.cache_data(ttl=3600)
 def load_data():
     conn = duckdb.connect(str(DB), read_only=True)
-    return conn.execute("SELECT * FROM gold_weather_daily ORDER BY date").df()
+    df = conn.execute("SELECT * FROM gold_weather_daily ORDER BY date").df()
+    df_anomalies = conn.execute("SELECT * FROM gold_weather_anomalies ORDER BY date").df()
+    return df, df_anomalies
 
 st.set_page_config(page_title="Berlin Weather Dashboard", layout="wide")
 
 st.title("Berlin Weather Dashboard")
 st.write("Explore daily weather patterns in Berlin. Data is collected hourly from the Bright Sky API and aggregated by day.")
 
-df = load_data()
+df, df_anomalies = load_data()
 if df.empty:
     st.warning("No data yet — run the pipeline first.")
     st.stop()
@@ -56,3 +58,14 @@ st.divider()
 st.subheader("Cloud Cover")
 st.write("Percentage of the sky covered by clouds each day. 0% means a completely clear sky, 100% means fully overcast. Higher values typically mean less sunshine.")
 st.bar_chart(df, x="date", y="avg_cloud_cover_pct")
+
+st.divider()
+
+st.subheader("Temperature Anomalies")
+st.write("Days where temperature was unusually high or low compared to the previous 30-day average. Flagged when the temperature deviates by more than 2 standard deviations.")
+
+anomalies = df_anomalies[df_anomalies["is_anomaly"] == True]
+if anomalies.empty:
+    st.info("No anomalies detected yet — more data needed for a 30-day baseline.")
+else:
+    st.dataframe(anomalies[["date", "avg_temp_c", "rolling_avg", "z_score"]].round(2))
