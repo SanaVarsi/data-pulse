@@ -3,13 +3,14 @@
 A generic end-to-end data pipeline framework — ingest from any API, store in DuckDB, transform with dbt, and visualize on a dashboard.
 
 Built as a portfolio project to demonstrate a real-world data engineering stack using open source tools.
-## Dashboard Preview
-
-![Berlin Weather Dashboard](docs/dashboard.png)
 
 ## Live Dashboard
 
-> Coming soon — deploy link will be added after Streamlit Cloud setup
+🔗 [https://data-pulse101.streamlit.app](https://data-pulse101.streamlit.app)
+
+## Dashboard Preview
+
+![Dashboard Preview](docs/dashboard.gif)
 
 ---
 
@@ -35,6 +36,7 @@ DuckDB — landing.weather
       │
       ▼
 Streamlit Dashboard
+(charts + anomaly detection + 7-day forecast)
 ```
 
 ---
@@ -48,6 +50,7 @@ Streamlit Dashboard
 | **dbt** | Transforms raw data through Bronze, Silver and Gold layers using SQL |
 | **Streamlit** | Interactive dashboard built on top of the Gold table |
 | **GitHub Actions** | Schedules the pipeline to run automatically every day |
+| **scikit-learn** | Linear regression model for 7-day temperature forecast |
 | **uv** | Python package manager |
 
 ---
@@ -66,12 +69,15 @@ data-pulse/
       silver/
         silver_weather.sql   # cleaned and properly typed
       gold/
-        gold_weather_daily.sql # daily aggregations
+        gold_weather_daily.sql    # daily aggregations
+        gold_weather_anomalies.sql # rolling z-score anomaly detection
   dashboard/
     app.py                   # Streamlit dashboard
+    forecast.py              # 7-day temperature forecast model
   .github/
     workflows/
       pipeline.yml           # GitHub Actions daily schedule
+      ci.yml                 # dbt build on every PR
 ```
 
 ---
@@ -109,6 +115,18 @@ uv run streamlit run dashboard/app.py
 ## Data Source
 
 Weather data is sourced from [Bright Sky](https://brightsky.dev) — a free API built on top of open data from the German Weather Service (DWD). Data covers Berlin (52.52°N, 13.405°E).
+
+---
+
+## What I Learned
+
+- **Medallion architecture** — structuring data into Bronze, Silver and Gold layers keeps raw data safe and transformations clean and auditable
+- **dbt** — writing SQL models that reference each other with `{{ ref() }}` and running them in the right order automatically
+- **Data quality tests** — adding `not_null` and `unique` tests to catch bad data before it reaches the dashboard
+- **GitHub Actions** — scheduling a pipeline to run daily and committing results back to the repo automatically
+- **Anomaly detection** — using rolling z-scores to flag unusual weather days without any ML model
+- **Linear regression forecasting** — using lag features (past temperatures) to predict future temperatures, and honestly evaluating the model with MAE
+- **Git workflow** — working with branches, PRs and squash merges to keep a clean commit history
 
 ---
 
