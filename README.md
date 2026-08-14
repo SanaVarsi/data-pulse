@@ -8,6 +8,8 @@ Built as a portfolio project to demonstrate a real-world data engineering stack 
 
 🔗 [https://data-pulse101.streamlit.app](https://data-pulse101.streamlit.app)
 
+📄 [dbt Docs](https://sanavarsi.github.io/data-pulse)
+
 ## Dashboard Preview
 
 ![Dashboard Preview](docs/dashboard.gif)
