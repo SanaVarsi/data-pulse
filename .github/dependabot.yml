@@ -1,0 +1,19 @@
+version: 2
+updates:
+  # Keeps GitHub Actions pins in the workflows current.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    # Actions run inside CI with ambient trust (secrets, environment
+    # access) -- major bumps get a deliberate look, not auto-approval.
+    # Security-advisory PRs bypass this and land regardless.
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  # uv.lock + pyproject.toml.
+  - package-ecosystem: "uv"
+    directory: "/"
+    schedule:
+      interval: "weekly"
