@@ -19,7 +19,12 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v4
       - name: Install dependencies
-        run: uv sync
+        # --frozen: use uv.lock exactly as committed, never re-resolve/rewrite it.
+        # Without this, `uv sync` silently rewrites uv.lock in CI (the runner has
+        # no exclude-newer policy, unlike a dev machine with one configured
+        # globally), leaving a tracked file dirty that later breaks the
+        # git-commit step below with "cannot pull with rebase: unstaged changes".
+        run: uv sync --frozen
       - name: Run weather pipeline
         run: uv run python pipelines/weather/weather_pipeline.py
       - name: Run dbt models
@@ -29,7 +34,10 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git add bright_sky_weather.duckdb
+          # -A, not just the duckdb file: catches any other tracked file a
+          # pipeline/dbt run might touch, so it can't be left dirty and block
+          # the rebase below.
+          git add -A
           git commit -m "chore: update weather data" || echo "No changes to commit"
           git pull --rebase origin main
           git push
