@@ -31,6 +31,11 @@ jobs:
           git config user.email "actions@github.com"
           git add bright_sky_weather.duckdb
           git commit -m "chore: update weather data" || echo "No changes to commit"
+          # DuckDB can re-touch the file (WAL checkpoint) after staging but before
+          # this point, leaving the tree dirty and breaking `pull --rebase` below.
+          # Fold any such straggler write into the same commit before proceeding.
+          git add bright_sky_weather.duckdb
+          git diff --cached --quiet || git commit --amend --no-edit
           git pull --rebase origin main
           git push
 
